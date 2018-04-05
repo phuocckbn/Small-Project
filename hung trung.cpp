@@ -37,8 +37,9 @@ int ngang=80;
 char map[100][100];
 int size_bk=7;
 int hp=3;
-
-eggs trung;
+int temp=0;
+eggs trung[10];
+eggs image_egg;
 toado td_chicken;
 
 void drawchicken(int x,int y)
@@ -105,17 +106,7 @@ void khoitao(int doc, int ngang)
 	strcpy(array,quacquac.draw_chicken);*/
 	
 	//khoi tao qua trung
-	trung.draw_eggs=79;
-	srand(time(NULL));
-	int a=rand() % 4+1;
-	switch(a)
-	{
-		case 1: trung.td_eggs.x=10;break;
-		case 2: trung.td_eggs.x=30;break;
-		case 3: trung.td_eggs.x=50;break;
-		case 4: trung.td_eggs.x=70;break;
-	} 
-	trung.td_eggs.y= 3;
+	
 	
 	
 }
@@ -182,6 +173,38 @@ void XoaManHinh()
 	Position.X=0;
 	Position.Y=0;
 	SetConsoleCursorPosition(hOut,Position);
+}
+void xulytrung(int temp,eggs *trung)
+{
+	image_egg.draw_eggs=(char)2;
+	srand(time(NULL));
+	int a=rand() % 4+1;
+	switch(a)
+	{
+		case 1: trung[temp].td_eggs.x=10;break;
+		case 2: trung[temp].td_eggs.x=30;break;
+		case 3: trung[temp].td_eggs.x=50;break;
+		case 4: trung[temp].td_eggs.x=70;break;
+	} 
+	trung[temp].td_eggs.y= 3;
+	
+}
+void logictrung(baskets &thung,eggs &trung )
+{
+	if(trung.td_eggs.y<20)
+	{
+		
+		trung.td_eggs.y++;
+	}
+	else 
+	{
+		trung.td_eggs.y=5;
+	}
+	//va cham
+	if(trung.td_eggs.y==thung.td_baskets.x&&trung.td_eggs.x>=thung.td_baskets.y&&trung.td_eggs.x<=thung.td_baskets.y+5)
+	{
+		
+	}
 }
 int main() 
 {
