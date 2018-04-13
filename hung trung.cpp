@@ -16,7 +16,7 @@ struct toado
 	int x;
 	int y;
 };
-//trangthai tt_baskets;
+
 
 struct baskets
 {
@@ -35,13 +35,25 @@ struct eggs
 int doc=20;
 int ngang=80;
 char map[100][100];
-int size_bk=7;
+
 int hp=3;
 int temp=0;
-eggs trung[10];
-eggs image_egg;
+int diem=0;
+
+eggs trung;
+struct danhsach
+{
+	eggs trungs[20];
+	int soluong;//so qua trung hien co
+};
+danhsach DS;
+
 toado td_chicken;
 
+void draweggs(eggs &trung)
+{
+	map[trung.td_eggs.x][trung.td_eggs.y]='O';
+}
 void drawchicken(int x,int y)
 {
 	map[x][y]='<';
@@ -71,7 +83,7 @@ void khoitao(int doc, int ngang)
 	{
 		for(int j=0;j<ngang;j++)
 		{
-			if(i==0)
+			if(i==0||i==doc)
 			{
 				map[i][j]=(char)220;
 			}
@@ -83,6 +95,7 @@ void khoitao(int doc, int ngang)
 				map[i][j]=' ';
 			}	
 		}
+		
 	
 	
     }
@@ -91,21 +104,7 @@ void khoitao(int doc, int ngang)
     drawchicken(2,48);
     drawchicken(2,66);
     
-	/*for(int i=0;i<3;i++)//khoi tao cai thung
-	{
-		for(int j=0;j<size_bk;j++)
-		{
-			//if(j<=size_bk-i-1&&j>=i)
-			//{
-			//	thung.draw_bk[i][j]=220;
-			//}else thung.draw_bk[i][j]=' ';
-		}
-	}*/
-	/*khoi tao con ga
-	char array[10]="~(.)~";
-	strcpy(array,quacquac.draw_chicken);*/
 	
-	//khoi tao qua trung
 	
 	
 	
@@ -124,6 +123,7 @@ void draw(char map[100][100])// xu li hinh anh output
 		}
 		cout<<endl;
 	}
+
 }
 
  
@@ -143,17 +143,17 @@ void logic(baskets &thung)
 		
 			if(GetAsyncKeyState(VK_RIGHT))
 			{
-				if(thung.td_baskets.y<80)
+				if(thung.td_baskets.y<71)
 				{
-					thung.td_baskets.y++;//=thung.td_baskets.y++;
+					thung.td_baskets.y=thung.td_baskets.y+18;
 				}		
 			}
 				
 			else if(GetAsyncKeyState(VK_LEFT))
 			{
-				if(thung.td_baskets.y>2)
+				if(thung.td_baskets.y>15)
 				{
-					thung.td_baskets.y--;//=thung.td_baskets.y--;
+					thung.td_baskets.y=thung.td_baskets.y-18;
 				}
 			}
 	//qua trung		
@@ -174,41 +174,58 @@ void XoaManHinh()
 	Position.Y=0;
 	SetConsoleCursorPosition(hOut,Position);
 }
-void xulytrung(int temp,eggs *trung)
+void xulytrung(eggs &trung)
 {
-	image_egg.draw_eggs=(char)2;
+	//image_egg.draw_eggs=(char)2;
 	srand(time(NULL));
 	int a=rand() % 4+1;
 	switch(a)
 	{
-		case 1: trung[temp].td_eggs.x=10;break;
-		case 2: trung[temp].td_eggs.x=30;break;
-		case 3: trung[temp].td_eggs.x=50;break;
-		case 4: trung[temp].td_eggs.x=70;break;
+		case 1: trung.td_eggs.y=14;break;
+		case 2: trung.td_eggs.y=32;break;
+		case 3: trung.td_eggs.y=50;break;
+		case 4: trung.td_eggs.y=68;break;
 	} 
-	trung[temp].td_eggs.y= 3;
+	trung.td_eggs.x= 4;
 	
 }
-void logictrung(baskets &thung,eggs &trung )
+void logictrung(int &diem,baskets &thung,eggs &trung ,int &hp)
 {
-	if(trung.td_eggs.y<20)
+	if(trung.td_eggs.x<20)
 	{
 		
-		trung.td_eggs.y++;
+		trung.td_eggs.x++;
 	}
 	else 
 	{
-		trung.td_eggs.y=5;
+		xulytrung(trung);
+		hp--;
 	}
 	//va cham
-	if(trung.td_eggs.y==thung.td_baskets.x&&trung.td_eggs.x>=thung.td_baskets.y&&trung.td_eggs.x<=thung.td_baskets.y+5)
+	if(trung.td_eggs.x==thung.td_baskets.x&&trung.td_eggs.y>=thung.td_baskets.y&&trung.td_eggs.y<=thung.td_baskets.y+5)
 	{
 		
+		diem++;
+		xulytrung(trung);
 	}
+}
+void anymore(danhsach &DS,baskets &thung)
+{
+	
+	for(int i=0;i<DS.soluong;i++)
+	{
+		//xulytrung(DS.trungs[i]);
+		logictrung(diem,thung,DS.trungs[i],hp);
+		draweggs(DS.trungs[i]);
+	}
+	Sleep(200);
+	//anymore(DS,thung);
+	
 }
 int main() 
 {
 	baskets thung ={17,12};
+	int dem=0;
 	while(hp>0)
 	{
 		XoaManHinh();
@@ -217,18 +234,31 @@ int main()
 		logic(thung);
         khoitao(doc,ngang);
         drawbaskets(thung);
+        dem++;
+        
+        anymore(DS,thung);
+        //logictrung(diem,thung,trung);
+        //draweggs(temp,trung);
         draw(map);
         
+        gotoxy(0,25);
+        cout<<"diem : "<<diem<<endl;
+        cout<<"mau : "<<hp;
+        Sleep(200);
+        
 	}
+	XoaManHinh();
+	
+	
 	
     
    
    
   
-   gotoxy(10,2);
+   
  
-   //system("pause");
-   sleep(200);
+   
+  
    
    
  
