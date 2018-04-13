@@ -43,16 +43,17 @@ int diem=0;
 eggs trung;
 struct danhsach
 {
-	eggs trungs[20];
-	int soluong;//so qua trung hien co
+	eggs trungs[30];
+	
 };
 danhsach DS;
-
+int soluong=0;//so luong qua trung
+int dem1=0;
 toado td_chicken;
 
 void draweggs(eggs &trung)
 {
-	map[trung.td_eggs.x][trung.td_eggs.y]='O';
+	map[trung.td_eggs.x][trung.td_eggs.y]=220;
 }
 void drawchicken(int x,int y)
 {
@@ -143,7 +144,7 @@ void logic(baskets &thung)
 		
 			if(GetAsyncKeyState(VK_RIGHT))
 			{
-				if(thung.td_baskets.y<71)
+				if(thung.td_baskets.y<65)
 				{
 					thung.td_baskets.y=thung.td_baskets.y+18;
 				}		
@@ -209,16 +210,16 @@ void logictrung(int &diem,baskets &thung,eggs &trung ,int &hp)
 		xulytrung(trung);
 	}
 }
-void anymore(danhsach &DS,baskets &thung)
+void khoitaotrung(danhsach &DS,baskets &thung,int &dem1)
 {
 	
-	for(int i=0;i<DS.soluong;i++)
-	{
-		//xulytrung(DS.trungs[i]);
-		logictrung(diem,thung,DS.trungs[i],hp);
-		draweggs(DS.trungs[i]);
-	}
-	Sleep(200);
+	
+	
+		xulytrung(DS.trungs[dem1]);
+		//logictrung(diem,thung,DS.trungs[i],hp);
+		draweggs(DS.trungs[dem1]);
+	
+	//Sleep(200);
 	//anymore(DS,thung);
 	
 }
@@ -226,25 +227,48 @@ int main()
 {
 	baskets thung ={17,12};
 	int dem=0;
+	int dem2=0;
+	
 	while(hp>0)
 	{
 		XoaManHinh();
 		
 		
+	
 		logic(thung);
         khoitao(doc,ngang);
         drawbaskets(thung);
-        dem++;
         
-        anymore(DS,thung);
-        //logictrung(diem,thung,trung);
-        //draweggs(temp,trung);
+        dem2++;
+        if(dem2%15==0)
+        {
+        	khoitaotrung(DS,thung,dem1);
+        	dem1++;
+        }
+        
+        //logictrung(diem,thung,trung,hp);
+        //draweggs(trung);
+        for(int i=0;i<=dem1;i++)
+        {
+        	logictrung(diem,thung,DS.trungs[i],hp);
+        	draweggs(DS.trungs[i]);
+        }
+        
+        
+		if(dem1==5)
+		{
+			dem1=0;
+		}
         draw(map);
         
-        gotoxy(0,25);
+        gotoxy(0,40);
         cout<<"diem : "<<diem<<endl;
         cout<<"mau : "<<hp;
         Sleep(200);
+        if(dem2==50)
+        {
+        	dem2==0;
+        }
         
 	}
 	XoaManHinh();
@@ -264,6 +288,4 @@ int main()
  
     return 0;
 }
-
-
 
