@@ -48,12 +48,12 @@ struct danhsach
 };
 danhsach DS;
 int soluong=0;//so luong qua trung
-int dem1=0;
+
 toado td_chicken;
 
 void draweggs(eggs &trung)
 {
-	map[trung.td_eggs.x][trung.td_eggs.y]=220;
+	map[trung.td_eggs.x][trung.td_eggs.y]=15;
 }
 void drawchicken(int x,int y)
 {
@@ -147,7 +147,7 @@ void logic(baskets &thung)
 				if(thung.td_baskets.y<65)
 				{
 					thung.td_baskets.y=thung.td_baskets.y+18;
-				}		
+				}else (thung.td_baskets.y=12);		
 			}
 				
 			else if(GetAsyncKeyState(VK_LEFT))
@@ -155,9 +155,9 @@ void logic(baskets &thung)
 				if(thung.td_baskets.y>15)
 				{
 					thung.td_baskets.y=thung.td_baskets.y-18;
-				}
+				}else (thung.td_baskets.y=67);
 			}
-	//qua trung		
+	
 			
 }
 	
@@ -199,14 +199,17 @@ void logictrung(int &diem,baskets &thung,eggs &trung ,int &hp)
 	}
 	else 
 	{
-		xulytrung(trung);
 		hp--;
+		
+		xulytrung(trung);
+		
 	}
 	//va cham
 	if(trung.td_eggs.x==thung.td_baskets.x&&trung.td_eggs.y>=thung.td_baskets.y&&trung.td_eggs.y<=thung.td_baskets.y+5)
 	{
 		
 		diem++;
+		
 		xulytrung(trung);
 	}
 }
@@ -219,8 +222,7 @@ void khoitaotrung(danhsach &DS,baskets &thung,int &dem1)
 		//logictrung(diem,thung,DS.trungs[i],hp);
 		draweggs(DS.trungs[dem1]);
 	
-	//Sleep(200);
-	//anymore(DS,thung);
+
 	
 }
 int main() 
@@ -228,26 +230,28 @@ int main()
 	baskets thung ={17,12};
 	int dem=0;
 	int dem2=0;
+	int dem1=0;
 	
 	while(hp>0)
 	{
+		Sleep(150);
 		XoaManHinh();
 		
 		
 	
-		logic(thung);
+		
         khoitao(doc,ngang);
+        logic(thung);
         drawbaskets(thung);
         
-        dem2++;
-        if(dem2%15==0)
+        
+        if(dem1<=3&&(dem2%15==0||dem2==0))
         {
         	khoitaotrung(DS,thung,dem1);
         	dem1++;
         }
+        dem2++;
         
-        //logictrung(diem,thung,trung,hp);
-        //draweggs(trung);
         for(int i=0;i<=dem1;i++)
         {
         	logictrung(diem,thung,DS.trungs[i],hp);
@@ -255,20 +259,22 @@ int main()
         }
         
         
-		if(dem1==5)
-		{
-			dem1=0;
-		}
+		
         draw(map);
         
         gotoxy(0,40);
         cout<<"diem : "<<diem<<endl;
         cout<<"mau : "<<hp;
-        Sleep(200);
+        
         if(dem2==50)
         {
         	dem2==0;
         }
+        if(dem1==100)
+		{
+			dem1=3;
+			
+		}
         
 	}
 	XoaManHinh();
