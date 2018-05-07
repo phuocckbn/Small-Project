@@ -179,7 +179,7 @@ void XoaManHinh()
 void xulytrung(eggs &trung)
 {
 	//image_egg.draw_eggs=(char)2;
-	srand(time(NULL));
+	srand((unsigned int)time(NULL));
 	int a=rand() % 4 + 1;
 	switch(a)
 	{
